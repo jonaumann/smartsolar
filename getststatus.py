@@ -1,19 +1,16 @@
-# Import modules
 import requests
-from bs4 import BeautifulSoup
 
 # Define URL
-url = "http://192.168.2.195/index_cn.html"
+url = "http://192.168.2.195/status.html"
 
-# Get URL content with requests
 response = requests.get(url, auth=('admin', 'admin'))
-html = response.content
+response = requests.get(url)
 
-# Parse HTML with BeautifulSoup
-soup = BeautifulSoup(html, "html.parser")
-
-# Find div with id webdata_now_p
-div = soup.find("div", id="webdata_now_p")
-
-# Print div content
-print(div.get_text())
+if response.ok:
+    for line in response.text.splitlines():
+        if line.strip().startswith("var webdata_now_p"):
+            value = line.split("=")[-1].strip().strip(";").strip("\"")
+            print(value)
+            break
+else:
+    print("Failed to fetch inverter status")
