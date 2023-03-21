@@ -13,4 +13,4 @@ if response.ok:
             print(value)
             break
 else:
-    print("Failed to fetch inverter status")
+    print("Failed to fetch inverter status!")
