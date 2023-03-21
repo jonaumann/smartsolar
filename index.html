@@ -1,0 +1,24 @@
+<html>
+  <head>
+    <title>WebSocket Test</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+  </head>
+  <body>
+    <div id="message"></div>
+    <script>
+      var websocket = new WebSocket("ws://localhost:4243");
+
+      websocket.onmessage = function (event) {
+        $("#message").prepend(event.data + "<br>");
+      };
+
+      websocket.onclose = function (event) {
+        console.log("WebSocket closed: ", event);
+      };
+
+      websocket.onerror = function (event) {
+        console.error("WebSocket error: ", event);
+      };
+    </script>
+  </body>
+</html>

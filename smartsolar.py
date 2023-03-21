@@ -57,6 +57,14 @@ def start_charging():
             f'Error starting charging: {response1.status_code} - {response1.reason}, {response2.status_code} - {response2.reason}')
 
 
+def start_check_solar():
+    while True:
+        asyncio.sleep(5)
+        print("checking")
+
+
 if __name__ == '__main__':
 
-    start_web_server()
+    asyncio.gather(start_web_server(), start_check_solar())
+
+    # start_web_server()
