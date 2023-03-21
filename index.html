@@ -1,0 +1,23 @@
+<html>
+    <head>
+        <title>WebSocket Test</title>
+    </head>
+    <body>
+        <div id="message"></div>
+        <script>
+            var websocket = new WebSocket("ws://localhost");
+
+            websocket.onmessage = function(event) {
+                document.getElementById("message").innerHTML = event.data;
+            };
+
+            websocket.onclose = function(event) {
+                console.log("WebSocket closed: ", event);
+            };
+
+            websocket.onerror = function(event) {
+                console.error("WebSocket error: ", event);
+            };
+        </script>
+    </body>
+</html>
