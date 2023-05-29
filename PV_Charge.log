@@ -276,3 +276,4 @@
 2023-05-29 18:50:37,639 - setting brightness to 4
 2023-05-29 18:50:37,655 - Kilowatt PV-Anlage: 0.494 -> Ampere Roundend: 1, Approx KW:0.6875
 2023-05-29 18:50:38,622 - stop charging
+2023-05-29 19:14:41,337 - Online Current Ampere: 2, Charge Limit: 100, Charge Status: Stopped, Battery Lvl: 76

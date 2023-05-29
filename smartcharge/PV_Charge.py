@@ -116,7 +116,7 @@ def tesla_pv_charge_control():
                     brightness = int(
                         hue.convert_to_percent(pv_voltage, 300, 4500))
                     if brightness == 0:
-                        brigtness = 1
+                        brightness = 1
                     log('setting brightness to ' + str(brightness))
                     hue.set_light_brightness(3, brightness)
 
