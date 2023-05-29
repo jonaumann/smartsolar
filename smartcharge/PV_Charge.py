@@ -19,13 +19,18 @@ import urllib
 import time
 import constants_pv_charging
 
-from logging.handlers import RotatingFileHandler
+
 from geopy.geocoders import Nominatim
 from geopy.exc import GeocoderTimedOut
 from teslapy import Tesla
 from urllib.parse import urlsplit, parse_qs
 from http import HTTPStatus
 from pv import read_pv_voltage
+from Hue import Hue
+from mylogger import *
+
+hue = Hue()
+# hue.list_lights()
 
 ###############################################################################################################
 # Main
@@ -56,35 +61,6 @@ def main():
 ###############################################################################################################
 # Logging-Einstellungen
 ###############################################################################################################
-
-
-def setuplog():
-    global logger
-    logger = logging.getLogger('pv_charge_logger')
-    logger.setLevel(logging.INFO)
-
-    fileHandler = RotatingFileHandler(constants_pv_charging.LOG_FILE_NAME, mode='a',
-                                      encoding='utf-8', maxBytes=constants_pv_charging.LOG_FILE_MAX_BYTES, backupCount=9)
-
-    fileHandler.setLevel(logging.INFO)
-
-    sysHandler = logging.StreamHandler()
-    sysHandler.setLevel(logging.INFO)
-    formatter = logging.Formatter('%(asctime)s - %(message)s')
-
-    fileHandler.setFormatter(formatter)
-    sysHandler.setFormatter(formatter)
-
-    logger.addHandler(fileHandler)
-    logger.addHandler(sysHandler)
-
-###############################################################################################################
-# Logging-Shortcut
-###############################################################################################################
-
-
-def log(value):
-    logger.info(value)
 
 
 ###############################################################################################################
@@ -132,6 +108,16 @@ def tesla_pv_charge_control():
                 # Hier wird über ein Modul die aktuelle Leistung der PV-Anlage ausgelesen.
 
                 pv_voltage = read_pv_voltage()
+
+                if pv_voltage < 300:
+                    hue.switch_light(3, False)
+                else:
+                    hue.switch_light(3, True)
+                    brightness = int(
+                        hue.convert_to_percent(pv_voltage, 300, 4500))
+                    log('setting brightness to ' + str(brightness))
+                    hue.set_light_brightness(3, brightness)
+
                 kilowatts = pv_voltage/1000
                 # ampere = kilowatts*constants_pv_charging.AMPERE_FACTOR;
                 ampere_rounded = round(
