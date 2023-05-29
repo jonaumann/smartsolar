@@ -1,3 +1,151 @@
-2023-05-27 12:39:07,377 - Online Current Ampere: 6, Charge Limit: 100, Charge Status: Charging, Battery Lvl: 94
-2023-05-27 12:39:08,688 - Kilowatt PV-Anlage: 4.36 -> Ampere Roundend: 6, Approx KW:4.125
-2023-05-27 12:39:09,074 - Did not change. Not Setting a value
+2023-05-29 16:34:12,478 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 79
+2023-05-29 16:34:13,240 - Charger disconnected, can not set charge!
+2023-05-29 16:34:44,319 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 79
+2023-05-29 16:34:44,517 - Charger disconnected, can not set charge!
+2023-05-29 16:35:16,443 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 79
+2023-05-29 16:35:16,622 - Charger disconnected, can not set charge!
+2023-05-29 16:35:48,620 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 79
+2023-05-29 16:35:48,888 - Charger disconnected, can not set charge!
+2023-05-29 16:36:20,610 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 79
+2023-05-29 16:36:20,804 - Charger disconnected, can not set charge!
+2023-05-29 16:36:51,848 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 79
+2023-05-29 16:36:52,031 - Charger disconnected, can not set charge!
+2023-05-29 16:37:23,192 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 79
+2023-05-29 16:37:23,360 - Charger disconnected, can not set charge!
+2023-05-29 16:37:54,394 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 79
+2023-05-29 16:37:55,113 - Charger disconnected, can not set charge!
+2023-05-29 16:38:26,095 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 79
+2023-05-29 16:38:27,093 - Charger disconnected, can not set charge!
+2023-05-29 16:38:58,976 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 79
+2023-05-29 16:38:59,171 - Charger disconnected, can not set charge!
+2023-05-29 16:39:30,240 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 78
+2023-05-29 16:39:30,415 - Charger disconnected, can not set charge!
+2023-05-29 16:40:01,450 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 78
+2023-05-29 16:40:01,627 - Charger disconnected, can not set charge!
+2023-05-29 16:40:32,440 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 78
+2023-05-29 16:40:32,607 - Charger disconnected, can not set charge!
+2023-05-29 16:41:04,089 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 78
+2023-05-29 16:41:04,310 - Charger disconnected, can not set charge!
+2023-05-29 16:41:35,690 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 78
+2023-05-29 16:41:35,859 - Charger disconnected, can not set charge!
+2023-05-29 16:42:07,153 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 78
+2023-05-29 16:42:07,333 - Charger disconnected, can not set charge!
+2023-05-29 16:42:38,414 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 77
+2023-05-29 16:42:38,637 - Charger disconnected, can not set charge!
+2023-05-29 16:43:09,519 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 77
+2023-05-29 16:43:09,985 - Charger disconnected, can not set charge!
+2023-05-29 16:43:40,922 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 77
+2023-05-29 16:43:41,217 - Charger disconnected, can not set charge!
+2023-05-29 16:44:12,395 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 77
+2023-05-29 16:44:12,616 - Charger disconnected, can not set charge!
+2023-05-29 16:44:43,591 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 77
+2023-05-29 16:44:43,778 - Charger disconnected, can not set charge!
+2023-05-29 16:45:14,749 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 77
+2023-05-29 16:45:14,921 - Charger disconnected, can not set charge!
+2023-05-29 16:45:46,559 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 77
+2023-05-29 16:45:46,740 - Charger disconnected, can not set charge!
+2023-05-29 16:46:17,912 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 77
+2023-05-29 16:46:18,347 - Charger disconnected, can not set charge!
+2023-05-29 16:46:49,873 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 77
+2023-05-29 16:46:50,141 - Charger disconnected, can not set charge!
+2023-05-29 16:47:21,130 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 76
+2023-05-29 16:47:21,316 - Charger disconnected, can not set charge!
+2023-05-29 16:47:52,326 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 76
+2023-05-29 16:47:52,512 - Charger disconnected, can not set charge!
+2023-05-29 16:48:23,791 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 76
+2023-05-29 16:48:23,993 - Charger disconnected, can not set charge!
+2023-05-29 16:48:55,222 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 76
+2023-05-29 16:48:55,399 - Charger disconnected, can not set charge!
+2023-05-29 16:49:26,525 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 76
+2023-05-29 16:49:27,081 - Charger disconnected, can not set charge!
+2023-05-29 16:49:59,036 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 75
+2023-05-29 16:49:59,545 - Charger disconnected, can not set charge!
+2023-05-29 16:50:30,460 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 75
+2023-05-29 16:50:30,643 - Charger disconnected, can not set charge!
+2023-05-29 16:51:01,760 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 75
+2023-05-29 16:51:01,936 - Charger disconnected, can not set charge!
+2023-05-29 16:51:32,975 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 75
+2023-05-29 16:51:33,167 - Charger disconnected, can not set charge!
+2023-05-29 16:52:04,681 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 75
+2023-05-29 16:52:04,834 - Charger disconnected, can not set charge!
+2023-05-29 16:52:36,400 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 75
+2023-05-29 16:52:36,608 - Charger disconnected, can not set charge!
+2023-05-29 16:53:08,382 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 75
+2023-05-29 16:53:08,579 - Charger disconnected, can not set charge!
+2023-05-29 16:53:39,433 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 75
+2023-05-29 16:53:39,600 - Charger disconnected, can not set charge!
+2023-05-29 16:54:11,998 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 75
+2023-05-29 16:54:12,221 - Charger disconnected, can not set charge!
+2023-05-29 16:54:43,091 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 75
+2023-05-29 16:54:43,247 - Charger disconnected, can not set charge!
+2023-05-29 16:55:14,869 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 75
+2023-05-29 16:55:15,075 - Charger disconnected, can not set charge!
+2023-05-29 16:55:46,134 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 74
+2023-05-29 16:55:46,322 - Charger disconnected, can not set charge!
+2023-05-29 16:56:17,261 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 74
+2023-05-29 16:56:17,469 - Charger disconnected, can not set charge!
+2023-05-29 16:56:48,457 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 74
+2023-05-29 16:56:48,655 - Charger disconnected, can not set charge!
+2023-05-29 16:57:20,281 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 74
+2023-05-29 16:57:20,479 - Charger disconnected, can not set charge!
+2023-05-29 16:57:51,757 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 74
+2023-05-29 16:57:51,962 - Charger disconnected, can not set charge!
+2023-05-29 16:58:24,089 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 74
+2023-05-29 16:58:24,266 - Charger disconnected, can not set charge!
+2023-05-29 16:58:55,312 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 74
+2023-05-29 16:58:55,540 - Charger disconnected, can not set charge!
+2023-05-29 16:59:27,535 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 74
+2023-05-29 16:59:27,746 - Charger disconnected, can not set charge!
+2023-05-29 16:59:58,691 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 73
+2023-05-29 16:59:58,872 - Charger disconnected, can not set charge!
+2023-05-29 17:00:29,808 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 73
+2023-05-29 17:00:29,983 - Charger disconnected, can not set charge!
+2023-05-29 17:01:01,073 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 73
+2023-05-29 17:01:01,363 - Charger disconnected, can not set charge!
+2023-05-29 17:01:32,838 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 73
+2023-05-29 17:01:33,035 - Charger disconnected, can not set charge!
+2023-05-29 17:02:04,135 - Online Current Ampere: 16, Charge Limit: 100, Charge Status: Disconnected, Battery Lvl: 73
+2023-05-29 17:02:04,368 - Charger disconnected, can not set charge!
+2023-05-29 17:02:35,559 - Online Current Ampere: 6, Charge Limit: 100, Charge Status: Charging, Battery Lvl: 73
+2023-05-29 17:02:37,165 - Kilowatt PV-Anlage: 2.231 -> Ampere Roundend: 3, Approx KW:2.0625
+2023-05-29 17:02:37,831 - Setting Ampere: 3
+2023-05-29 17:03:10,047 - Online Current Ampere: 3, Charge Limit: 100, Charge Status: Charging, Battery Lvl: 73
+2023-05-29 17:03:10,657 - Kilowatt PV-Anlage: 2.231 -> Ampere Roundend: 3, Approx KW:2.0625
+2023-05-29 17:03:11,285 - Did not change. Not Setting a value
+2023-05-29 17:03:43,004 - Online Current Ampere: 3, Charge Limit: 100, Charge Status: Charging, Battery Lvl: 73
+2023-05-29 17:03:46,584 - Kilowatt PV-Anlage: 2.231 -> Ampere Roundend: 3, Approx KW:2.0625
+2023-05-29 17:03:46,991 - Did not change. Not Setting a value
+2023-05-29 17:04:18,659 - Online Current Ampere: 3, Charge Limit: 100, Charge Status: Charging, Battery Lvl: 73
+2023-05-29 17:04:19,369 - Kilowatt PV-Anlage: 2.231 -> Ampere Roundend: 3, Approx KW:2.0625
+2023-05-29 17:04:19,807 - Did not change. Not Setting a value
+2023-05-29 17:04:50,946 - Online Current Ampere: 3, Charge Limit: 100, Charge Status: Charging, Battery Lvl: 73
+2023-05-29 17:04:51,596 - Kilowatt PV-Anlage: 2.231 -> Ampere Roundend: 3, Approx KW:2.0625
+2023-05-29 17:04:51,963 - Did not change. Not Setting a value
+2023-05-29 17:05:23,633 - Online Current Ampere: 3, Charge Limit: 100, Charge Status: Charging, Battery Lvl: 73
+2023-05-29 17:05:25,268 - Kilowatt PV-Anlage: 2.231 -> Ampere Roundend: 3, Approx KW:2.0625
+2023-05-29 17:05:25,891 - Did not change. Not Setting a value
+2023-05-29 17:05:58,085 - Online Current Ampere: 3, Charge Limit: 100, Charge Status: Charging, Battery Lvl: 73
+2023-05-29 17:05:59,287 - Kilowatt PV-Anlage: 2.214 -> Ampere Roundend: 3, Approx KW:2.0625
+2023-05-29 17:05:59,627 - Did not change. Not Setting a value
+2023-05-29 17:06:30,806 - Online Current Ampere: 3, Charge Limit: 100, Charge Status: Charging, Battery Lvl: 73
+2023-05-29 17:06:31,592 - Kilowatt PV-Anlage: 2.214 -> Ampere Roundend: 3, Approx KW:2.0625
+2023-05-29 17:06:32,129 - Did not change. Not Setting a value
+2023-05-29 17:07:03,007 - Online Current Ampere: 3, Charge Limit: 100, Charge Status: Charging, Battery Lvl: 73
+2023-05-29 17:07:04,127 - Kilowatt PV-Anlage: 2.214 -> Ampere Roundend: 3, Approx KW:2.0625
+2023-05-29 17:07:04,484 - Did not change. Not Setting a value
+2023-05-29 17:07:35,542 - Online Current Ampere: 3, Charge Limit: 100, Charge Status: Charging, Battery Lvl: 73
+2023-05-29 17:07:36,134 - Kilowatt PV-Anlage: 2.214 -> Ampere Roundend: 3, Approx KW:2.0625
+2023-05-29 17:07:36,476 - Did not change. Not Setting a value
+2023-05-29 17:08:08,468 - Online Current Ampere: 3, Charge Limit: 100, Charge Status: Charging, Battery Lvl: 73
+2023-05-29 17:08:09,544 - Kilowatt PV-Anlage: 2.214 -> Ampere Roundend: 3, Approx KW:2.0625
+2023-05-29 17:08:10,134 - Did not change. Not Setting a value
+2023-05-29 17:08:41,716 - Online Current Ampere: 3, Charge Limit: 100, Charge Status: Charging, Battery Lvl: 73
+2023-05-29 17:08:43,445 - Kilowatt PV-Anlage: 2.214 -> Ampere Roundend: 3, Approx KW:2.0625
+2023-05-29 17:08:43,970 - Did not change. Not Setting a value
+2023-05-29 17:09:14,890 - Online Current Ampere: 3, Charge Limit: 100, Charge Status: Charging, Battery Lvl: 73
+2023-05-29 17:09:15,672 - Kilowatt PV-Anlage: 2.214 -> Ampere Roundend: 3, Approx KW:2.0625
+2023-05-29 17:09:16,116 - Did not change. Not Setting a value
+2023-05-29 17:09:48,721 - Online Current Ampere: 3, Charge Limit: 100, Charge Status: Charging, Battery Lvl: 73
+2023-05-29 17:09:49,314 - Kilowatt PV-Anlage: 2.214 -> Ampere Roundend: 3, Approx KW:2.0625
+2023-05-29 17:09:49,682 - Did not change. Not Setting a value
+2023-05-29 17:10:21,586 - Online Current Ampere: 3, Charge Limit: 100, Charge Status: Charging, Battery Lvl: 73

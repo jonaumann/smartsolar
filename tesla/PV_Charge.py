@@ -47,9 +47,11 @@ def main():
     while True:
         try:
             tesla_pv_charge_control()
-            time.sleep(constants_pv_charging.SLEEP_BETWEEN_CALLS)
+
         except Exception as exception:
             log(exception)
+
+        time.sleep(constants_pv_charging.SLEEP_BETWEEN_CALLS)
 
 ###############################################################################################################
 # Logging-Einstellungen
@@ -95,8 +97,9 @@ def tesla_pv_charge_control():
         vehicles = tesla.vehicle_list()
 
         # Auto schläft, kann nicht geladen werden
-        if vehicles[0]['state'] == "asleep":
-            log('Sleeping, can not set charge!')
+        if vehicles[0]['state'] != "online":
+            log('Sleeping, trying to wake up')
+            vehicles[0].command('WAKE_UP')
             return
         # Auto wach
         else:
@@ -119,14 +122,15 @@ def tesla_pv_charge_control():
             # Auto angesteckt
             else:
                 # Ist das Auto zu Hause?
-                coords = '%s, %s' % (vehicles[0].get_vehicle_data()[
-                                     'drive_state']['latitude'], vehicles[0].get_vehicle_data()['drive_state']['longitude'])
-                osm = Nominatim(user_agent='TeslaPy')
-                location = osm.reverse(coords).address
-                if location in constants_pv_charging.HOME_LOCATION:
-                    log('Vehicle not at home. Doing nothing')
-                    return
-                # Hier wird über ein Modul die aktuelle Leistung der PV-Anlage ausgelesen. Bei mir über das Web-Interface Kostal Pico. Dies muss spezifisch angepasst werden.
+                # coords = '%s, %s' % (vehicles[0].get_vehicle_data()[
+                #                     'drive_state']['latitude'], vehicles[0].get_vehicle_data()['drive_state']['longitude'])
+                # osm = Nominatim(user_agent='TeslaPy')
+                # location = osm.reverse(coords).address
+                # if location in constants_pv_charging.HOME_LOCATION:
+                #    log('Vehicle not at home. Doing nothing')
+                #    return
+                # Hier wird über ein Modul die aktuelle Leistung der PV-Anlage ausgelesen.
+
                 pv_voltage = read_pv_voltage()
                 kilowatts = pv_voltage/1000
                 # ampere = kilowatts*constants_pv_charging.AMPERE_FACTOR;

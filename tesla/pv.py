@@ -11,7 +11,7 @@ if not 'last_value' in globals():
 def read_pv_voltage():
     growattServer.GrowattApi.server_url = "https://server.growatt.com/"
     api = growattServer.GrowattApi()
-    login_response = api.login("jonaumann", "jtlr1771")
+    login_response = api.login("jonaumann", "Jesus2010")
     user_id = login_response['user']['id']
     # Get a list of growatt plants.
     plant_info = api.plant_info(2012060)
