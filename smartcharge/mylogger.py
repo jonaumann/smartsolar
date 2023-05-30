@@ -9,7 +9,7 @@ def setuplog():
     logger.setLevel(logging.INFO)
 
     fileHandler = RotatingFileHandler(constants_pv_charging.LOG_FILE_NAME, mode='a',
-                                      encoding='utf-8', maxBytes=constants_pv_charging.LOG_FILE_MAX_BYTES, backupCount=9)
+                                      encoding='utf-8', maxBytes=constants_pv_charging.LOG_FILE_MAX_BYTES, backupCount=1)
 
     fileHandler.setLevel(logging.INFO)
 

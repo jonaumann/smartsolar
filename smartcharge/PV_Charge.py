@@ -55,6 +55,10 @@ def main():
 
         except Exception as exception:
             log(exception)
+            try:
+                hue.switch_light(3, False)
+            except Exception as ex:
+                log(ex)
 
         time.sleep(constants_pv_charging.SLEEP_BETWEEN_CALLS)
 
