@@ -24,4 +24,4 @@ def read_pv_voltage():
     except Exception as exception:
         power = -1
 
-    return power * 8
+    return int(power * 7.64)
