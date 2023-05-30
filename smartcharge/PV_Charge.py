@@ -95,6 +95,31 @@ def tesla_pv_charge_control():
                 str(vehicles[0].get_vehicle_data()[
                     'charge_state']['battery_level'])
                 )
+
+            pv_voltage = read_pv_voltage()
+
+            if pv_voltage < 300:
+                hue.switch_light(3, False)
+            else:
+                hue.switch_light(3, True)
+                brightness = int(
+                    hue.convert_to_percent(pv_voltage, 300, 4500))
+                if brightness == 0:
+                    brightness = 1
+                log('setting brightness to ' + str(brightness))
+                hue.set_light_brightness(3, brightness)
+
+            kilowatts = pv_voltage/1000
+            # ampere = kilowatts*constants_pv_charging.AMPERE_FACTOR;
+            ampere_rounded = round(
+                kilowatts*constants_pv_charging.AMPERE_FACTOR)
+            if kilowatts < 1.5:
+                # Unter 1,5 nicht mehr laden
+                ampere_rounded = 1
+
+            log('Kilowatt PV-Anlage: ' + str(kilowatts) + ' -> Ampere Roundend: ' +
+                str(ampere_rounded) + ', Approx KW:' + str(ampere_rounded*(11/16)))
+
             # Auto nicht angesteckt, kann nicht geladen werden
             if vehicles[0].get_vehicle_data()['charge_state']['charging_state'] == 'Disconnected':
                 log('Charger disconnected, can not set charge!')
@@ -111,29 +136,6 @@ def tesla_pv_charge_control():
                 #    return
                 # Hier wird über ein Modul die aktuelle Leistung der PV-Anlage ausgelesen.
 
-                pv_voltage = read_pv_voltage()
-
-                if pv_voltage < 300:
-                    hue.switch_light(3, False)
-                else:
-                    hue.switch_light(3, True)
-                    brightness = int(
-                        hue.convert_to_percent(pv_voltage, 300, 4500))
-                    if brightness == 0:
-                        brightness = 1
-                    log('setting brightness to ' + str(brightness))
-                    hue.set_light_brightness(3, brightness)
-
-                kilowatts = pv_voltage/1000
-                # ampere = kilowatts*constants_pv_charging.AMPERE_FACTOR;
-                ampere_rounded = round(
-                    kilowatts*constants_pv_charging.AMPERE_FACTOR)
-                if kilowatts < 1.5:
-                    # Unter 1,5 nicht mehr laden
-                    ampere_rounded = 1
-
-                log('Kilowatt PV-Anlage: ' + str(kilowatts) + ' -> Ampere Roundend: ' +
-                    str(ampere_rounded) + ', Approx KW:' + str(ampere_rounded*(11/16)))
                 # > 1 Ampere -> Laden
                 if ampere_rounded > constants_pv_charging.MINIMUM_AMPERE_LEVEL:
                     # Wenn nicht lädt, laden starten, außer wenn schon complete
