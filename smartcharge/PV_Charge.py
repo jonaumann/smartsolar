@@ -75,7 +75,7 @@ def tesla_pv_charge_control():
         # Auto schläft, kann nicht geladen werden
         if vehicles[0]['state'] != "online":
             log('Sleeping, trying to wake up')
-            vehicles[0].command('WAKE_UP')
+            vehicles[0].sync_wake_up()
             return
         # Auto wach
         else:

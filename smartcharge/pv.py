@@ -1,5 +1,4 @@
-import growattServer
-import re
+import requests
 
 global last_value
 if not 'last_value' in globals():
@@ -9,11 +8,20 @@ if not 'last_value' in globals():
 
 
 def read_pv_voltage():
-    growattServer.GrowattApi.server_url = "https://server.growatt.com/"
-    api = growattServer.GrowattApi()
-    login_response = api.login("jonaumann", "Jesus2010")
-    user_id = login_response['user']['id']
-    # Get a list of growatt plants.
-    plant_info = api.plant_info(2012060)
-    current_power = plant_info["deviceList"][0]["power"]
-    return int(float(current_power))
+    url = "http://192.168.2.254/status.html"
+    try:
+        response = requests.get(url, auth=('admin', 'admin'))
+        response = requests.get(url)
+        power = 0
+        if response.ok:
+            for line in response.text.splitlines():
+                if line.strip().startswith("var webdata_now_p"):
+                    value = line.split("=")[-1].strip().strip(";").strip("\"")
+                    power = int(value)
+                    break
+        else:
+            power = -1
+    except Exception as exception:
+        power = -1
+
+    return power * 8

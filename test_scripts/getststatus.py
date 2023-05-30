@@ -1,7 +1,7 @@
 import requests
 
 # Define URL
-url = "http://192.168.2.195/status.html"
+url = "http://192.168.2.254/status.html"
 
 response = requests.get(url, auth=('admin', 'admin'))
 response = requests.get(url)
