@@ -85,7 +85,7 @@ def tesla_pv_charge_control():
         # Auto wach
         else:
             # Status ausgeben
-            log('Online Current Ampere: ' + str(vehicles[0].get_vehicle_data()['charge_state']['charge_current_request'])
+            log('Tesla Current Ampere: ' + str(vehicles[0].get_vehicle_data()['charge_state']['charge_current_request'])
                 + ', Charge Limit: ' +
                 str(vehicles[0].get_vehicle_data()[
                     'charge_state']['charge_limit_soc'])
@@ -98,8 +98,9 @@ def tesla_pv_charge_control():
                 )
 
             pv_voltage = read_pv_voltage()
+            log('current pv watts: ' + str(pv_voltage))
             current_watts = read_current_watts()
-            log('current watts: ' + str(current_watts))
+            log('current consumed watts: ' + str(current_watts))
             pv_voltage -= current_watts
 
             if pv_voltage < 300:
@@ -167,8 +168,8 @@ def tesla_pv_charge_control():
                         # Wenn unter 5 Ampere, muss der Wert 2x gesetzt werden
                         vehicles[0].command(
                             'CHARGING_AMPS', charging_amps=1)
-                    log("sleeping after stopcharge " +
-                        str(constants_pv_charging.WAIT_SECONDS_AFTER_CHARGE_STOP))
+                    # log("sleeping after stopcharge " +
+                    #    str(constants_pv_charging.WAIT_SECONDS_AFTER_CHARGE_STOP))
                     time.sleep(
                         constants_pv_charging.WAIT_SECONDS_AFTER_CHARGE_STOP)
         print('')
