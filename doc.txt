@@ -1,0 +1,2 @@
+Banana Pi login : jojo jtlr1771 192.168.2.221
+Tasmota Web Interface: 192.168.2.216

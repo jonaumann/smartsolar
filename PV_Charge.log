@@ -39,3 +39,19 @@
 2023-05-30 17:37:34,827 - setting brightness to 45
 2023-05-30 17:37:34,845 - Kilowatt PV-Anlage: 2.212 -> Ampere Roundend: 3, Approx KW:2.0625
 2023-05-30 17:37:35,155 - Charger disconnected, can not set charge!
+2023-06-01 10:06:46,289 - Online Current Ampere: 4, Charge Limit: 100, Charge Status: Charging, Battery Lvl: 88
+2023-06-01 10:07:07,071 - setting brightness to 66
+2023-06-01 10:07:07,119 - Kilowatt PV-Anlage: 3.108 -> Ampere Roundend: 4, Approx KW:2.75
+2023-06-01 10:07:12,051 - Did not change. Not Setting a value
+2023-06-01 10:07:32,443 - Online Current Ampere: 4, Charge Limit: 100, Charge Status: Charging, Battery Lvl: 88
+2023-06-01 10:07:35,729 - setting brightness to 66
+2023-06-01 10:07:35,761 - Kilowatt PV-Anlage: 3.108 -> Ampere Roundend: 4, Approx KW:2.75
+2023-06-01 10:07:36,357 - Did not change. Not Setting a value
+2023-06-01 10:07:52,659 - Online Current Ampere: 4, Charge Limit: 100, Charge Status: Charging, Battery Lvl: 88
+2023-06-01 10:07:53,128 - setting brightness to 66
+2023-06-01 10:07:53,156 - Kilowatt PV-Anlage: 3.108 -> Ampere Roundend: 4, Approx KW:2.75
+2023-06-01 10:07:53,691 - Did not change. Not Setting a value
+2023-06-08 16:44:43,889 - Online Current Ampere: 2, Charge Limit: 100, Charge Status: Stopped, Battery Lvl: 72
+2023-06-08 16:45:19,699 - Kilowatt PV-Anlage: -0.309 -> Ampere Roundend: 1, Approx KW:0.6875
+2023-06-08 16:45:20,205 - sleeping after stopcharge 0
+2023-06-08 16:45:36,319 - Online Current Ampere: 2, Charge Limit: 100, Charge Status: Stopped, Battery Lvl: 72

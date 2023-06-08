@@ -26,6 +26,7 @@ from teslapy import Tesla
 from urllib.parse import urlsplit, parse_qs
 from http import HTTPStatus
 from pv import read_pv_voltage
+from tasmota import read_current_watts
 from Hue import Hue
 from mylogger import *
 
@@ -97,6 +98,9 @@ def tesla_pv_charge_control():
                 )
 
             pv_voltage = read_pv_voltage()
+            current_watts = read_current_watts()
+            log('current watts: ' + str(current_watts))
+            pv_voltage -= current_watts
 
             if pv_voltage < 300:
                 hue.switch_light(3, False)
