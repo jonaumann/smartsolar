@@ -163,10 +163,10 @@ def tesla_pv_charge_control():
                         log("stop charging")
                         vehicles[0].command('STOP_CHARGE')
                         vehicles[0].command(
-                            'CHARGING_AMPS', 1)
+                            'CHARGING_AMPS', charging_amps=1)
                         # Wenn unter 5 Ampere, muss der Wert 2x gesetzt werden
                         vehicles[0].command(
-                            'CHARGING_AMPS', 1)
+                            'CHARGING_AMPS', charging_amps=1)
                     log("sleeping after stopcharge " +
                         str(constants_pv_charging.WAIT_SECONDS_AFTER_CHARGE_STOP))
                     time.sleep(
