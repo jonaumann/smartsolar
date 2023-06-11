@@ -123,8 +123,9 @@ def tesla_pv_charge_control():
                 # Unter 1,5 nicht mehr laden
                 ampere_rounded = 1
 
-            log('Kilowatt PV-Anlage: ' + str(kilowatts) + ' -> Ampere Roundend: ' +
-                str(ampere_rounded) + ', Approx KW:' + str(ampere_rounded*(11/16)))
+            log('Kilowatt PV-Anlage: ' + str(kilowatts) + '\nAmpere Roundend: ' +
+                str(ampere_rounded))
+            # + ', Approx KW:' + str(ampere_rounded*(11/16)))
 
             # Auto nicht angesteckt, kann nicht geladen werden
             if vehicles[0].get_vehicle_data()['charge_state']['charging_state'] == 'Disconnected':
