@@ -1,0 +1,33 @@
+<html>
+  <body style="background-color: black; color: white">
+    <div id="info"></div>
+    <script>
+      const url = "/index.html?m=1"; // Replace with the actual path to your HTML file
+      const targetDiv = document.getElementById("info");
+      var oldhtml = "";
+
+      update();
+      setInterval(() => {
+        update();
+      }, 20000);
+
+      function update() {
+        fetch(url)
+          .then((response) => response.text())
+          .then((html) => {
+            targetDiv.innerHTML = html.replaceAll("\n", "<br>");
+            if (oldhtml == html) {
+              targetDiv.style.backgroundColor = "red";
+            } else {
+              targetDiv.style.backgroundColor = "black";
+            }
+            oldhtml = html;
+          })
+          .catch((error) => {
+            targetDiv.innerHTML =
+              "<span color='red'>ERROR: " + error + "</span>";
+          });
+      }
+    </script>
+  </body>
+</html>

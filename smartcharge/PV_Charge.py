@@ -18,6 +18,7 @@ import geopy.geocoders
 import urllib
 import time
 import constants_pv_charging
+import time
 
 
 from geopy.geocoders import Nominatim
@@ -28,8 +29,8 @@ from http import HTTPStatus
 from pv import read_pv_voltage
 from tasmota import read_current_watts
 from Hue import Hue
-from mylogger import *
 
+oldhtml = ""
 hue = Hue()
 # hue.list_lights()
 
@@ -39,9 +40,6 @@ hue = Hue()
 
 
 def main():
-    # Log intitlisieren
-    setuplog()
-
     # Threaded Http Server initialisiern
     httpd = http.server.ThreadingHTTPServer(
         ("", constants_pv_charging.SERVER_PORT), HttpHandler)
@@ -55,11 +53,11 @@ def main():
             tesla_pv_charge_control()
 
         except Exception as exception:
-            log(exception)
+            log(str(exception))
             try:
                 hue.switch_light(3, False)
             except Exception as ex:
-                log(ex)
+                log(str(ex))
 
         time.sleep(constants_pv_charging.SLEEP_BETWEEN_CALLS)
 
@@ -72,6 +70,12 @@ def main():
 # Tesla Ampere Einstellen in Abhängigkeit der PV-Leistung
 ###############################################################################################################
 def tesla_pv_charge_control():
+
+    with open("info.log", "w") as file:
+        # Truncate the file
+        file.truncate()
+    log(time.ctime(time.time()))
+
     with Tesla("jochen.naumann@strelen.de", False, False) as tesla:
         # Token muss in cache.json vorhanden sein. Vorher einfach z.B. gui.py aufrufen und 1x einloggen
         tesla.fetch_token()
@@ -86,13 +90,10 @@ def tesla_pv_charge_control():
         else:
             # Status ausgeben
             log('Tesla Current Ampere: ' + str(vehicles[0].get_vehicle_data()['charge_state']['charge_current_request'])
-                + ', Charge Limit: ' +
-                str(vehicles[0].get_vehicle_data()[
-                    'charge_state']['charge_limit_soc'])
-                + ', Charge Status: ' +
+                + '\n Charge Status: ' +
                 str(vehicles[0].get_vehicle_data()[
                     'charge_state']['charging_state'])
-                + ', Battery Lvl: ' +
+                + '\n Battery Lvl: ' +
                 str(vehicles[0].get_vehicle_data()[
                     'charge_state']['battery_level'])
                 )
@@ -173,6 +174,7 @@ def tesla_pv_charge_control():
                     time.sleep(
                         constants_pv_charging.WAIT_SECONDS_AFTER_CHARGE_STOP)
         print('')
+        log("###")
 
 
 ###############################################################################################################
@@ -180,11 +182,6 @@ def tesla_pv_charge_control():
 ###############################################################################################################
 class HttpHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
-        self.send_response(HTTPStatus.OK)
-        self.end_headers()
-        logFile = open(constants_pv_charging.LOG_FILE_NAME, "rb")
-        # Ausgabe des Log-Files
-        self.wfile.write(logFile.read())
 
         query = urlsplit(self.path).query
         params = parse_qs(query)
@@ -192,6 +189,32 @@ class HttpHandler(http.server.SimpleHTTPRequestHandler):
         if "quit" in params:
             log('User Exit')
             os._exit(0)
+        elif "m" in params:
+            info = b""
+            while ("###" not in info.decode('utf-8')):
+                logFile = open("info.log", "rb")
+                info = logFile.read()
+                print(info)
+                time.sleep(1)
+
+            self.send_response(HTTPStatus.OK)
+            self.end_headers()
+            self.wfile.write(info)
+        elif self.path == "/":
+            file = open("index.html", "rb")
+            html = file.read()
+            self.send_response(HTTPStatus.OK)
+            self.end_headers()
+            self.wfile.write(html)
+        else:
+            self.send_response(HTTPStatus.NOT_FOUND)
+            self.end_headers()
+
+
+def log(text):
+    with open("info.log", "a") as file:
+        # Write the text to the file
+        file.write(text + "\n")
 
 
 if __name__ == "__main__":
