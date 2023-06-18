@@ -8,7 +8,7 @@ if not 'last_value' in globals():
 
 
 def read_pv_voltage():
-    url = "http://192.168.2.254/status.html"
+    url = "http://192.168.2.195/status.html"
     try:
         response = requests.get(url, auth=('admin', 'admin'))
         response = requests.get(url)
