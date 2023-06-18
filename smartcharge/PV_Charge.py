@@ -19,6 +19,7 @@ import urllib
 import time
 import constants_pv_charging
 import time
+import datetime
 
 
 from geopy.geocoders import Nominatim
@@ -49,15 +50,17 @@ def main():
 
     # Endlosschleife Aufruf pv_charge_control mit 10 Sekunden Pause
     while True:
-        try:
-            tesla_pv_charge_control()
-
-        except Exception as exception:
-            log(str(exception))
+        current_time = datetime.datetime.now().time()
+        if current_time > datetime.time(7, 55) and current_time < datetime.time(18):
             try:
-                hue.switch_light(3, False)
-            except Exception as ex:
-                log(str(ex))
+                tesla_pv_charge_control()
+
+            except Exception as exception:
+                log(str(exception))
+                try:
+                    hue.switch_light(3, False)
+                except Exception as ex:
+                    log(str(ex))
 
         time.sleep(constants_pv_charging.SLEEP_BETWEEN_CALLS)
 
