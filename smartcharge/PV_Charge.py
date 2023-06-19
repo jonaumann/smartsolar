@@ -32,6 +32,8 @@ from tasmota import read_current_watts
 from Hue import Hue
 
 oldhtml = ""
+charge_level = 0
+
 hue = Hue()
 # hue.list_lights()
 
@@ -53,12 +55,13 @@ def main():
 
         current_time = datetime.datetime.now().time()
 
-        if current_time == datetime.time(8):
+        if current_time.hour == 18 and charge_level != 100:
             with open("info.log", "w") as file:
                 # Truncate the file
                 file.truncate()
             log(time.ctime(time.time()))
             tesla_set_charge_level(100)
+            charge_level = 100
             log("###")
 
         elif current_time > datetime.time(7, 55) and current_time < datetime.time(18):
@@ -79,12 +82,13 @@ def main():
 
             log("###")
 
-        elif False:  # current_time == datetime.time(18):
+        elif current_time.hour == 18 and charge_level != 50:
             with open("info.log", "w") as file:
                 # Truncate the file
                 file.truncate()
             log(time.ctime(time.time()))
             tesla_set_charge_level(50)
+            charge_level = 50
             log("sleeping")
             log("###")
 
