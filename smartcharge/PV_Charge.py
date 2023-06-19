@@ -48,10 +48,25 @@ def main():
     thread.daemon = True
     thread.start()
 
-    # Endlosschleife Aufruf pv_charge_control mit 10 Sekunden Pause
+    # Endlosschleife
     while True:
+
         current_time = datetime.datetime.now().time()
-        if current_time > datetime.time(7, 55) and current_time < datetime.time(18):
+
+        if current_time == datetime.time(8):
+            with open("info.log", "w") as file:
+                # Truncate the file
+                file.truncate()
+            log(time.ctime(time.time()))
+            tesla_set_charge_level(100)
+            log("###")
+
+        elif current_time > datetime.time(7, 55) and current_time < datetime.time(18):
+            with open("info.log", "w") as file:
+                # Truncate the file
+                file.truncate()
+            log(time.ctime(time.time()))
+
             try:
                 tesla_pv_charge_control()
 
@@ -61,6 +76,17 @@ def main():
                     hue.switch_light(3, False)
                 except Exception as ex:
                     log(str(ex))
+
+            log("###")
+
+        elif False:  # current_time == datetime.time(18):
+            with open("info.log", "w") as file:
+                # Truncate the file
+                file.truncate()
+            log(time.ctime(time.time()))
+            tesla_set_charge_level(50)
+            log("sleeping")
+            log("###")
 
         time.sleep(constants_pv_charging.SLEEP_BETWEEN_CALLS)
 
@@ -73,11 +99,6 @@ def main():
 # Tesla Ampere Einstellen in Abhängigkeit der PV-Leistung
 ###############################################################################################################
 def tesla_pv_charge_control():
-
-    with open("info.log", "w") as file:
-        # Truncate the file
-        file.truncate()
-    log(time.ctime(time.time()))
 
     with Tesla("jochen.naumann@strelen.de", False, False) as tesla:
         # Token muss in cache.json vorhanden sein. Vorher einfach z.B. gui.py aufrufen und 1x einloggen
@@ -177,13 +198,33 @@ def tesla_pv_charge_control():
                     #    str(constants_pv_charging.WAIT_SECONDS_AFTER_CHARGE_STOP))
                     time.sleep(
                         constants_pv_charging.WAIT_SECONDS_AFTER_CHARGE_STOP)
-        print('')
-        log("###")
+
+
+def tesla_set_charge_level(limit):
+
+    try:
+        with Tesla("jochen.naumann@strelen.de", False, False) as tesla:
+            # Token muss in cache.json vorhanden sein. Vorher einfach z.B. gui.py aufrufen und 1x einloggen
+            tesla.fetch_token()
+            vehicles = tesla.vehicle_list()
+
+            if vehicles[0]['state'] != "online":
+                log('Sleeping, trying to wake up')
+                vehicles[0].sync_wake_up()
+                log("woken up")
+
+            if vehicles[0].command("CHANGE_CHARGE_LIMIT", percent=limit):
+                log("charging limit set")
+
+    except Exception as ex:
+        log("error setting charge limit: "+str(ex))
 
 
 ###############################################################################################################
 # Http-Handler, gibt das Log-File zurück. Parameter quit beendet das Programm
 ###############################################################################################################
+
+
 class HttpHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
 
