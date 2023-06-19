@@ -49,13 +49,14 @@ def main():
     thread = threading.Thread(target=httpd.serve_forever)
     thread.daemon = True
     thread.start()
-
+    global charge_level
+    charge_level = 0
     # Endlosschleife
     while True:
 
         current_time = datetime.datetime.now().time()
 
-        if current_time.hour == 18 and charge_level != 100:
+        if current_time.hour == 8 and charge_level != 100:
             with open("info.log", "w") as file:
                 # Truncate the file
                 file.truncate()
