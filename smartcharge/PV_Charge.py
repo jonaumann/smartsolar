@@ -56,20 +56,15 @@ def main():
 
         current_time = datetime.datetime.now().time()
 
-        if current_time.hour == 8 and charge_level != 100:
+        if current_time > datetime.time(7, 55) and current_time < datetime.time(18):
             with open("info.log", "w") as file:
                 # Truncate the file
                 file.truncate()
             log(time.ctime(time.time()))
-            tesla_set_charge_level(100)
-            charge_level = 100
-            log("###")
 
-        elif current_time > datetime.time(7, 55) and current_time < datetime.time(18):
-            with open("info.log", "w") as file:
-                # Truncate the file
-                file.truncate()
-            log(time.ctime(time.time()))
+            if charge_level != 100:
+                tesla_set_charge_level(100)
+                charge_level = 100
 
             try:
                 tesla_pv_charge_control()
@@ -83,7 +78,7 @@ def main():
 
             log("###")
 
-        elif current_time.hour == 18 and charge_level != 50:
+        elif charge_level != 50:
             with open("info.log", "w") as file:
                 # Truncate the file
                 file.truncate()
@@ -92,12 +87,12 @@ def main():
             charge_level = 50
             log("sleeping")
             log("###")
+            try:
+                hue.switch_light(3, False)
+            except Exception as ex:
+                log(str(ex))
 
         time.sleep(constants_pv_charging.SLEEP_BETWEEN_CALLS)
-
-###############################################################################################################
-# Logging-Einstellungen
-###############################################################################################################
 
 
 ###############################################################################################################
