@@ -11,8 +11,8 @@ def read_consumed_watts():
             power = int(float(value))
 
         else:
-            power = -42
+            power = 4200000
     except Exception as exception:
-        power = -1
+        power = 424200000
 
     return power
