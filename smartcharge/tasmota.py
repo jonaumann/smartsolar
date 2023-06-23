@@ -1,7 +1,7 @@
 import requests
 
 
-def read_current_watts():
+def read_consumed_watts():
     url = "http://192.168.2.216/?m=1"
     try:
         response = requests.get(url)

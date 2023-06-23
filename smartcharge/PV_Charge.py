@@ -28,7 +28,7 @@ from teslapy import Tesla
 from urllib.parse import urlsplit, parse_qs
 from http import HTTPStatus
 from pv import read_pv_voltage
-from tasmota import read_current_watts
+from tasmota import read_consumed_watts
 from Hue import Hue
 
 oldhtml = ""
@@ -51,6 +51,11 @@ def main():
     thread.start()
     global charge_level
     charge_level = 0
+
+    ampere = 3
+    last_ampere = 0
+    consumed = 0
+
     # Endlosschleife
     while True:
         try:
@@ -61,13 +66,25 @@ def main():
             log(time.ctime(time.time()))
             pv_voltage = read_pv_voltage()
             log('current pv watts: ' + str(pv_voltage))
-            current_watts = read_current_watts()
-            log('current consumed watts: ' + str(current_watts))
-            pv_voltage -= current_watts
+            consumed = read_consumed_watts()
+            log('current consumed watts: ' + str(consumed))
 
-            if pv_voltage < 300:
+            if consumed > 0:
                 hue.switch_light(3, False)
+                if consumed > 2000:
+                    ampere -= 3
+                elif consumed > 1000:
+                    ampere -= 2
+                elif consumed > 200:
+                    ampere -= 1
+                if ampere < 1:
+                    ampere = 1
+
             else:
+                ampere += 1
+                if ampere > 5:
+                    ampere = 5
+
                 hue.switch_light(3, True)
                 brightness = int(
                     hue.convert_to_percent(pv_voltage, 300, 4500))
@@ -76,26 +93,13 @@ def main():
                 log('setting brightness to ' + str(brightness))
                 hue.set_light_brightness(3, brightness)
 
-            if current_time > datetime.time(7, 55) and current_time < datetime.time(18):
-
-                if charge_level != 100:
-                    tesla_set_charge_level(100)
-                    charge_level = 100
-
-                tesla_pv_charge_control(pv_voltage)
-
-            elif charge_level != 50:
-                with open("info.log", "w") as file:
-                    # Truncate the file
-                    file.truncate()
-                log(time.ctime(time.time()))
-                tesla_set_charge_level(50)
-                charge_level = 50
-                log("sleeping")
-                try:
-                    hue.switch_light(3, False)
-                except Exception as ex:
-                    log(str(ex))
+            log('current ampere: ' + str(ampere))
+            if ampere != last_ampere:
+                last_ampere = ampere
+                log('changing ampere: ' + str(ampere))
+                tesla_pv_charge_control(ampere)
+            else:
+                log("doing nothing")
 
         except Exception as exception:
             log(str(exception))
@@ -111,7 +115,7 @@ def main():
 ###############################################################################################################
 # Tesla Ampere Einstellen in Abhängigkeit der PV-Leistung
 ###############################################################################################################
-def tesla_pv_charge_control(pv_voltage):
+def tesla_pv_charge_control(ampere):
 
     with Tesla("jochen.naumann@strelen.de", False, False) as tesla:
         # Token muss in cache.json vorhanden sein. Vorher einfach z.B. gui.py aufrufen und 1x einloggen
@@ -135,18 +139,6 @@ def tesla_pv_charge_control(pv_voltage):
                     'charge_state']['battery_level'])
                 )
 
-            kilowatts = pv_voltage/1000
-            # ampere = kilowatts*constants_pv_charging.AMPERE_FACTOR;
-            ampere_rounded = round(
-                kilowatts*constants_pv_charging.AMPERE_FACTOR)
-            if kilowatts < 1.5:
-                # Unter 1,5 nicht mehr laden
-                ampere_rounded = 1
-
-            log('Kilowatt PV-Anlage: ' + str(kilowatts) + '\nAmpere Roundend: ' +
-                str(ampere_rounded))
-            # + ', Approx KW:' + str(ampere_rounded*(11/16)))
-
             # Auto nicht angesteckt, kann nicht geladen werden
             if vehicles[0].get_vehicle_data()['charge_state']['charging_state'] == 'Disconnected':
                 log('Charger disconnected, can not set charge!')
@@ -162,53 +154,47 @@ def tesla_pv_charge_control(pv_voltage):
                     return
 
                 # > 1 Ampere -> Laden
-                if ampere_rounded > constants_pv_charging.MINIMUM_AMPERE_LEVEL:
-                    # Wenn nicht lädt, laden starten, außer wenn schon complete
-                    if vehicles[0].get_vehicle_data()['charge_state']['charging_state'] != 'Charging' and vehicles[0].get_vehicle_data()['charge_state']['charging_state'] != 'Complete':
-                        vehicles[0].command('START_CHARGE')
-                        print('start charging')
-                    # Charging Amps in Abhängigkeit PV-Leistung setzen
-                    if vehicles[0].get_vehicle_data()['charge_state']['charge_current_request'] != ampere_rounded:
+                if ampere > constants_pv_charging.MINIMUM_AMPERE_LEVEL:
+
+                    if vehicles[0].get_vehicle_data()['charge_state']['charge_current_request'] != ampere:
                         vehicles[0].command(
-                            'CHARGING_AMPS', charging_amps=ampere_rounded)
+                            'CHARGING_AMPS', charging_amps=ampere)
                         # Wenn unter 5 Ampere, muss der Wert 2x gesetzt werden
-                        if ampere_rounded < 5:
+                        if ampere < 5:
                             vehicles[0].command(
-                                'CHARGING_AMPS', charging_amps=ampere_rounded)
-                        log('Setting Ampere: ' + str(ampere_rounded))
-                    else:
-                        log('Did not change. Not Setting a value')
-                # <= 1 Ampere -> Lohnt sich nicht (ca. 300 W Grundlast), laden stoppen und etwas warten, damit nicht ständig das Laden gestart und gestoppt wird
+                                'CHARGING_AMPS', charging_amps=ampere)
+
+                    log('Tesla Charge Ampere: ' + str(ampere))
+                    tesla_set_charge_level(vehicles, 100)
+                # <= 1 Ampere -> Lohnt sich nicht (ca. 300 W Grundlast), laden stoppen
                 else:
-                    if vehicles[0].get_vehicle_data()['charge_state']['charging_state'] == 'Charging':
-                        log("stop charging")
-                        vehicles[0].command('STOP_CHARGE')
-                        vehicles[0].command(
-                            'CHARGING_AMPS', charging_amps=1)
-                        # Wenn unter 5 Ampere, muss der Wert 2x gesetzt werden
-                        vehicles[0].command(
-                            'CHARGING_AMPS', charging_amps=1)
+                    tesla_set_charge_level(vehicles, 50)
+                    vehicles[0].command(
+                        'CHARGING_AMPS', charging_amps=1)
+                    # Wenn unter 5 Ampere, muss der Wert 2x gesetzt werden
+                    vehicles[0].command(
+                        'CHARGING_AMPS', charging_amps=1)
                     # log("sleeping after stopcharge " +
                     #    str(constants_pv_charging.WAIT_SECONDS_AFTER_CHARGE_STOP))
                     time.sleep(
                         constants_pv_charging.WAIT_SECONDS_AFTER_CHARGE_STOP)
 
 
-def tesla_set_charge_level(limit):
+def tesla_set_charge_level(vehicles, limit):
+    global charge_level
+    if charge_level == limit:
+        return
 
     try:
-        with Tesla("jochen.naumann@strelen.de", False, False) as tesla:
-            # Token muss in cache.json vorhanden sein. Vorher einfach z.B. gui.py aufrufen und 1x einloggen
-            tesla.fetch_token()
-            vehicles = tesla.vehicle_list()
+        if vehicles[0]['state'] != "online":
+            log('Sleeping, trying to wake up')
+            vehicles[0].sync_wake_up()
+            log("woken up")
 
-            if vehicles[0]['state'] != "online":
-                log('Sleeping, trying to wake up')
-                vehicles[0].sync_wake_up()
-                log("woken up")
+        if vehicles[0].command("CHANGE_CHARGE_LIMIT", percent=limit):
+            log("charging limit set to "+limit)
 
-            if vehicles[0].command("CHANGE_CHARGE_LIMIT", percent=limit):
-                log("charging limit set")
+        charge_level = limit
 
     except Exception as ex:
         log("error setting charge limit: "+str(ex))
