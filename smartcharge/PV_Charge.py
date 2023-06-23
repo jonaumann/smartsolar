@@ -53,52 +53,65 @@ def main():
     charge_level = 0
     # Endlosschleife
     while True:
-
-        current_time = datetime.datetime.now().time()
-
-        if current_time > datetime.time(7, 55) and current_time < datetime.time(18):
+        try:
+            current_time = datetime.datetime.now().time()
             with open("info.log", "w") as file:
                 # Truncate the file
                 file.truncate()
             log(time.ctime(time.time()))
+            pv_voltage = read_pv_voltage()
+            log('current pv watts: ' + str(pv_voltage))
+            current_watts = read_current_watts()
+            log('current consumed watts: ' + str(current_watts))
+            pv_voltage -= current_watts
 
-            if charge_level != 100:
-                tesla_set_charge_level(100)
-                charge_level = 100
+            if pv_voltage < 300:
+                hue.switch_light(3, False)
+            else:
+                hue.switch_light(3, True)
+                brightness = int(
+                    hue.convert_to_percent(pv_voltage, 300, 4500))
+                if brightness == 0:
+                    brightness = 1
+                log('setting brightness to ' + str(brightness))
+                hue.set_light_brightness(3, brightness)
 
-            try:
-                tesla_pv_charge_control()
+            if current_time > datetime.time(7, 55) and current_time < datetime.time(18):
 
-            except Exception as exception:
-                log(str(exception))
+                if charge_level != 100:
+                    tesla_set_charge_level(100)
+                    charge_level = 100
+
+                tesla_pv_charge_control(pv_voltage)
+
+            elif charge_level != 50:
+                with open("info.log", "w") as file:
+                    # Truncate the file
+                    file.truncate()
+                log(time.ctime(time.time()))
+                tesla_set_charge_level(50)
+                charge_level = 50
+                log("sleeping")
                 try:
                     hue.switch_light(3, False)
                 except Exception as ex:
                     log(str(ex))
 
-            log("###")
-
-        elif charge_level != 50:
-            with open("info.log", "w") as file:
-                # Truncate the file
-                file.truncate()
-            log(time.ctime(time.time()))
-            tesla_set_charge_level(50)
-            charge_level = 50
-            log("sleeping")
-            log("###")
+        except Exception as exception:
+            log(str(exception))
             try:
                 hue.switch_light(3, False)
             except Exception as ex:
                 log(str(ex))
 
+        log("###")
         time.sleep(constants_pv_charging.SLEEP_BETWEEN_CALLS)
 
 
 ###############################################################################################################
 # Tesla Ampere Einstellen in Abhängigkeit der PV-Leistung
 ###############################################################################################################
-def tesla_pv_charge_control():
+def tesla_pv_charge_control(pv_voltage):
 
     with Tesla("jochen.naumann@strelen.de", False, False) as tesla:
         # Token muss in cache.json vorhanden sein. Vorher einfach z.B. gui.py aufrufen und 1x einloggen
@@ -122,23 +135,6 @@ def tesla_pv_charge_control():
                     'charge_state']['battery_level'])
                 )
 
-            pv_voltage = read_pv_voltage()
-            log('current pv watts: ' + str(pv_voltage))
-            current_watts = read_current_watts()
-            log('current consumed watts: ' + str(current_watts))
-            pv_voltage -= current_watts
-
-            if pv_voltage < 300:
-                hue.switch_light(3, False)
-            else:
-                hue.switch_light(3, True)
-                brightness = int(
-                    hue.convert_to_percent(pv_voltage, 300, 4500))
-                if brightness == 0:
-                    brightness = 1
-                log('setting brightness to ' + str(brightness))
-                hue.set_light_brightness(3, brightness)
-
             kilowatts = pv_voltage/1000
             # ampere = kilowatts*constants_pv_charging.AMPERE_FACTOR;
             ampere_rounded = round(
@@ -158,14 +154,12 @@ def tesla_pv_charge_control():
             # Auto angesteckt
             else:
                 # Ist das Auto zu Hause?
-                # coords = '%s, %s' % (vehicles[0].get_vehicle_data()[
-                #                     'drive_state']['latitude'], vehicles[0].get_vehicle_data()['drive_state']['longitude'])
-                # osm = Nominatim(user_agent='TeslaPy')
-                # location = osm.reverse(coords).address
-                # if location in constants_pv_charging.HOME_LOCATION:
-                #    log('Vehicle not at home. Doing nothing')
-                #    return
-                # Hier wird über ein Modul die aktuelle Leistung der PV-Anlage ausgelesen.
+                coords = '%s, %s' % (round(vehicles[0].get_vehicle_data()[
+                    'drive_state']['latitude'], 3), round(vehicles[0].get_vehicle_data()['drive_state']['longitude'], 3))
+
+                if coords != constants_pv_charging.HOME_LOCATION:
+                    log('Vehicle not at home. Doing nothing')
+                    return
 
                 # > 1 Ampere -> Laden
                 if ampere_rounded > constants_pv_charging.MINIMUM_AMPERE_LEVEL:
