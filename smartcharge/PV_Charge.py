@@ -192,7 +192,7 @@ def tesla_set_charge_level(vehicles, limit):
             log("woken up")
 
         if vehicles[0].command("CHANGE_CHARGE_LIMIT", percent=limit):
-            log("charging limit set to "+limit)
+            log("charging limit set to "+str(limit))
 
         charge_level = limit
 
