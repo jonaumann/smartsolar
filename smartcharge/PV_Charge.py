@@ -55,6 +55,7 @@ def main():
     ampere = 3
     last_ampere = 0
     consumed = 0
+    state = ""
 
     # Endlosschleife
     while True:
@@ -94,10 +95,13 @@ def main():
                 hue.set_light_brightness(3, brightness)
 
             log('current ampere: ' + str(ampere))
-            if ampere != last_ampere:
-                last_ampere = ampere
-                log('changing ampere: ' + str(ampere))
-                tesla_pv_charge_control(ampere)
+            if ampere != last_ampere or state != 'ready for charging':
+                state = tesla_pv_charge_control(ampere)
+                log('state: ' + str(state))
+                if ampere != last_ampere:
+                    log('changing ampere to ' + str(ampere))
+                    last_ampere = ampere
+
             else:
                 log("doing nothing")
 
@@ -109,6 +113,7 @@ def main():
                 log(str(ex))
 
         log("###")
+
         time.sleep(constants_pv_charging.SLEEP_BETWEEN_CALLS)
 
 
@@ -126,64 +131,65 @@ def tesla_pv_charge_control(ampere):
         if vehicles[0]['state'] != "online":
             log('Sleeping, trying to wake up')
             vehicles[0].sync_wake_up()
-            return
-        # Auto wach
+
+        # Status ausgeben
+        log('Tesla Current Ampere: ' + str(vehicles[0].get_vehicle_data()['charge_state']['charge_current_request'])
+            + '\n Charge Status: ' +
+            str(vehicles[0].get_vehicle_data()[
+                'charge_state']['charging_state'])
+            + '\n Battery Lvl: ' +
+            str(vehicles[0].get_vehicle_data()[
+                'charge_state']['battery_level'])
+            )
+
+        # Auto nicht angesteckt, kann nicht geladen werden
+        if vehicles[0].get_vehicle_data()['charge_state']['charging_state'] == 'Disconnected':
+            log('Charger disconnected, can not set charge!')
+            tesla_set_charge_level(vehicles, 50)
+            return "disconnected"
+        # Auto angesteckt
         else:
-            # Status ausgeben
-            log('Tesla Current Ampere: ' + str(vehicles[0].get_vehicle_data()['charge_state']['charge_current_request'])
-                + '\n Charge Status: ' +
-                str(vehicles[0].get_vehicle_data()[
-                    'charge_state']['charging_state'])
-                + '\n Battery Lvl: ' +
-                str(vehicles[0].get_vehicle_data()[
-                    'charge_state']['battery_level'])
-                )
+            # Ist das Auto zu Hause?
+            coords = '%s, %s' % (round(vehicles[0].get_vehicle_data()[
+                'drive_state']['latitude'], 2), round(vehicles[0].get_vehicle_data()['drive_state']['longitude'], 1))
 
-            # Auto nicht angesteckt, kann nicht geladen werden
-            if vehicles[0].get_vehicle_data()['charge_state']['charging_state'] == 'Disconnected':
-                log('Charger disconnected, can not set charge!')
-                return
-            # Auto angesteckt
-            else:
-                # Ist das Auto zu Hause?
-                coords = '%s, %s' % (round(vehicles[0].get_vehicle_data()[
-                    'drive_state']['latitude'], 3), round(vehicles[0].get_vehicle_data()['drive_state']['longitude'], 3))
+            if coords != constants_pv_charging.HOME_LOCATION:
+                log('Vehicle not at home. Doing nothing')
+                return 'not home'
 
-                if coords != constants_pv_charging.HOME_LOCATION:
-                    log('Vehicle not at home. Doing nothing')
-                    return
+            # > 1 Ampere -> Laden
+            if ampere > constants_pv_charging.MINIMUM_AMPERE_LEVEL:
 
-                # > 1 Ampere -> Laden
-                if ampere > constants_pv_charging.MINIMUM_AMPERE_LEVEL:
-
-                    if vehicles[0].get_vehicle_data()['charge_state']['charge_current_request'] != ampere:
+                if vehicles[0].get_vehicle_data()['charge_state']['charge_current_request'] != ampere:
+                    vehicles[0].command(
+                        'CHARGING_AMPS', charging_amps=ampere)
+                    # Wenn unter 5 Ampere, muss der Wert 2x gesetzt werden
+                    if ampere < 5:
                         vehicles[0].command(
                             'CHARGING_AMPS', charging_amps=ampere)
-                        # Wenn unter 5 Ampere, muss der Wert 2x gesetzt werden
-                        if ampere < 5:
-                            vehicles[0].command(
-                                'CHARGING_AMPS', charging_amps=ampere)
 
-                    log('Tesla Charge Ampere: ' + str(ampere))
-                    tesla_set_charge_level(vehicles, 100)
-                # <= 1 Ampere -> Lohnt sich nicht (ca. 300 W Grundlast), laden stoppen
-                else:
-                    tesla_set_charge_level(vehicles, 50)
-                    vehicles[0].command(
-                        'CHARGING_AMPS', charging_amps=1)
-                    # Wenn unter 5 Ampere, muss der Wert 2x gesetzt werden
-                    vehicles[0].command(
-                        'CHARGING_AMPS', charging_amps=1)
-                    # log("sleeping after stopcharge " +
-                    #    str(constants_pv_charging.WAIT_SECONDS_AFTER_CHARGE_STOP))
-                    time.sleep(
-                        constants_pv_charging.WAIT_SECONDS_AFTER_CHARGE_STOP)
+                log('Tesla Charge Ampere: ' + str(ampere))
+                tesla_set_charge_level(vehicles, 100)
+            # <= 1 Ampere -> Lohnt sich nicht (ca. 300 W Grundlast), laden stoppen
+            else:
+                tesla_set_charge_level(vehicles, 50)
+                vehicles[0].command(
+                    'CHARGING_AMPS', charging_amps=1)
+                # Wenn unter 5 Ampere, muss der Wert 2x gesetzt werden
+                vehicles[0].command(
+                    'CHARGING_AMPS', charging_amps=1)
+                # log("sleeping after stopcharge " +
+                #    str(constants_pv_charging.WAIT_SECONDS_AFTER_CHARGE_STOP))
+                time.sleep(
+                    constants_pv_charging.WAIT_SECONDS_AFTER_CHARGE_STOP)
+        return 'ready for charging'
 
 
 def tesla_set_charge_level(vehicles, limit):
     global charge_level
     if charge_level == limit:
         return
+    charge_level = limit
 
     try:
         if vehicles[0]['state'] != "online":
@@ -193,8 +199,6 @@ def tesla_set_charge_level(vehicles, limit):
 
         if vehicles[0].command("CHANGE_CHARGE_LIMIT", percent=limit):
             log("charging limit set to "+str(limit))
-
-        charge_level = limit
 
     except Exception as ex:
         log("error setting charge limit: "+str(ex))
