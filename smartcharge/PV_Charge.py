@@ -21,9 +21,6 @@ import constants_pv_charging
 import time
 import datetime
 
-
-from geopy.geocoders import Nominatim
-from geopy.exc import GeocoderTimedOut
 from teslapy import Tesla
 from urllib.parse import urlsplit, parse_qs
 from http import HTTPStatus
