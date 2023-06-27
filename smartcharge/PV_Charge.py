@@ -65,8 +65,8 @@ def main():
                 # Truncate the file
                 file.truncate()
             log(time.ctime(time.time()))
-            pv_voltage = read_pv_voltage()
-            log('current pv watts: ' + str(pv_voltage))
+            # pv_voltage = read_pv_voltage()
+            # log('current pv watts: ' + str(pv_voltage))
             consumed = read_consumed_watts()
             log('current consumed watts: ' + str(consumed))
 
@@ -87,8 +87,8 @@ def main():
                     ampere = 5
 
                 hue.switch_light(3, True)
-                brightness = int(
-                    hue.convert_to_percent(pv_voltage, 300, 4500))
+                # int(hue.convert_to_percent(pv_voltage, 300, 4500))
+                brightness = 50
                 if brightness == 0:
                     brightness = 1
                 log('setting brightness to ' + str(brightness))
