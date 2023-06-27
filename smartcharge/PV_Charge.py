@@ -14,7 +14,6 @@ import socketserver
 import threading
 import socket
 import argparse
-import geopy.geocoders
 import urllib
 import time
 import constants_pv_charging
